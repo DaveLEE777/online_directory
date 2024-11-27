@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>전화번호부</h2>
+<ul>
+    {% for contact in contacts %}
+        <li>
+            <a href="{{ url_for('detail', id=contact.id) }}">{{ contact.name }} - {{ contact.phone }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

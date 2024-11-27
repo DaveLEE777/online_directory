@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>상세 정보</h2>
+<p><strong>이름:</strong> {{ contact.name }}</p>
+<p><strong>전화번호:</strong> {{ contact.phone }}</p>
+<p><strong>이메일:</strong> {{ contact.email }}</p>
+<p><strong>생일:</strong> {{ contact.birthday }}</p>
+<p><strong>주소:</strong> {{ contact.address }}</p>
+
+<!-- 삭제 버튼 -->
+<form action="{{ url_for('delete_contact', id=contact.id) }}" method="post">
+    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+</form>
+
+<a href="{{ url_for('index') }}">돌아가기</a>
+{% endblock %}
