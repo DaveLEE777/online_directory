@@ -13,6 +13,7 @@ class Contact(db.Model):
     email = db.Column(db.String(50))
     birthday = db.Column(db.String(10))
     address = db.Column(db.String(100))
+    relation = db.Column(db.String(100))
 
 # 데이터베이스 생성
 with app.app_context():
@@ -31,8 +32,9 @@ def add_contact():
         email = request.form.get('email')
         birthday = request.form.get('birthday')
         address = request.form.get('address')
+        relation = request.form.get('relation')
         
-        new_contact = Contact(name=name, phone=phone, email=email, birthday=birthday, address=address)
+        new_contact = Contact(name=name, phone=phone, email=email, birthday=birthday, address=address, relation=relation)
         db.session.add(new_contact)
         db.session.commit()
         return redirect(url_for('index'))
