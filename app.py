@@ -56,6 +56,37 @@ def delete_contact(id):
     db.session.commit()
     return redirect(url_for('index'))
 
+
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_contact(id):
+    contact = Contact.query.get_or_404(id)
+
+    if request.method == 'POST':
+        # 폼에서 수정된 데이터 가져오기
+        contact.name = request.form['name']
+        contact.phone = request.form['phone']
+        
+        contact.email = request.form.get('email')
+        contact.birthday = request.form.get('birthday')
+        contact.address = request.form.get('address')
+
+        if request.form['relation'] == '기타':
+            contact.relation = request.form.get('custom_relation')
+        else:
+            contact.relation = request.form['relation']        
+        
+        # 데이터베이스에 변경 사항 저장
+        db.session.commit()
+        return redirect(url_for('detail', id=contact.id))
+
+    return render_template('edit_contact.html', contact=contact)
+
+
+
+
+
+
+
 # 앱 실행
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>연락처 수정</h2>
+<form action="{{ url_for('edit_contact', id=contact.id) }}" method="post">
+    <label for="name">이름:</label>
+    <div class="input-group">
+        <input type="text" name="name" id="name" value="{{ contact.name }}" required>
+        <img src="{{ url_for('static', filename='name_pic.png') }}">
+    </div>
+    
+    <label for="phone">전화번호:</label>
+    <div class="input-group">
+        <input type="text" name="phone" value="{{ contact.phone }}" required>
+        <img src="{{ url_for('static', filename='call_pic.png')}}">
+    </div>
+
+    <label for="relation">관계:</label>
+    <div class="input-group">
+        <select name="relation" id="relation" required onchange="togglecustominput()">
+            <option value="가족" {% if contact.relation == "가족" %}selected{% endif %}>가족</option>
+            <option value="친구" {% if contact.relation == "친구" %}selected{% endif %}>친구</option>
+            <option value="회사" {% if contact.relation == "회사" %}selected{% endif %}>회사</option>
+            <option value="학교" {% if contact.relation == "학교" %}selected{% endif %}>학교</option>
+            <option value="기타" {% if contact.relation not in ["가족", "친구", "회사", "학교"] %}selected{% endif %}>기타</option>
+        </select>
+        <input type="text" id="customrelation" name="custom_relation" placeholder="기타" style="display: none; margin-top: 10px"
+               value="{% if contact.relation not in ['가족', '친구', '회사', '학교'] %}{{ contact.relation }}{% endif %}">
+    </div>
+
+    <label for="email">이메일:</label>
+    <div class="input-group">
+        <input type="email" name="email" value="{{ contact.email }}">
+        <img src="{{ url_for('static', filename='email_pic.png')}}">
+    </div>
+    
+    <label for="birthday">생일:</label>
+    <div class="input-group">
+        <input type="date" name="birthday" value="{{ contact.birthday }}">
+        <img src="{{ url_for('static', filename='bir_pic.png')}}">
+    </div>
+    
+    <label for="address">주소:</label>
+    <div class="input-group">
+        <input type="text" name="address" value="{{ contact.address }}">
+        <img src="{{ url_for('static', filename='add_pic.png')}}">
+    </div>
+    
+    <button type="submit">저장하기</button>
+</form>
+
+<script>
+    function togglecustominput() {
+        const relationselect = document.getElementById('relation');
+        const custominput = document.getElementById('customrelation');
+
+        if (relationselect.value == '기타') {
+            custominput.style.display = 'block';
+            custominput.required = true;
+        } else {
+            custominput.style.display = 'none';
+            custominput.required = false;
+        }
+    }
+
+    // 페이지 로드 시 "기타" 상태 확인
+    window.onload = function() {
+        togglecustominput();
+    };
+</script>
+{% endblock %}
