@@ -1,34 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>새 명함 추가</h2>
+<h2>새 연락처 추가</h2>
 <form action="{{ url_for('add_contact') }}" method="post">
     <label for="name">이름:</label>
-    <input type="text" name="name" required><br>
+    <div class="input-group">
+        <input type="text" name="name" id="name" required>
+        <img src="{{ url_for('static', filename='name_pic.png') }}">
+    </div>
     
     <label for="phone">전화번호:</label>
-    <input type="text" name="phone" required><br>
+    <div class="input-group">
+        <input type="text" name="phone" required><br>
+        <img src="{{ url_for('static', filename='call_pic.png')}}">
+    </div>
+
 
     <label for="relation">관계:</label>
-    <select name="relation" required>
-        <option value="가족">가족</option>
-        <option value="친구">친구</option>
-        <option value="회사">회사</option>
-        <option value="학교">학교</option>
-        <option value="상사">상사</option>
-    </select><br>
+    <div class="input-group">
+        <select name="relation" id="relation" required onchange="togglecustominput()">
+            <option value="가족">가족</option>
+            <option value="친구">친구</option>
+            <option value="회사">회사</option>
+            <option value="학교">학교</option>
+            <option value="기타">기타</option>
 
+        </select>
+        <input type="text" id="customrelation" name="custom_relation" placeholder="기타" style="display: none; margin-top: 10px">
+    
+    </div>
 
 
     <label for="email">이메일:</label>
-    <input type="email" name="email"><br>
+    <div class="input-group">
+        <input type="email" name="email">
+        <img src="{{ url_for('static', filename='email_pic.png')}}">
+    </div>
     
     <label for="birthday">생일:</label>
-    <input type="date" name="birthday"><br>
-    
+    <div class="input-group">
+        <input type="date" name="birthday">
+        <img src="{{ url_for('static', filename='bir_pic.png')}}">
+    </div>
     <label for="address">주소:</label>
-    <input type="text" name="address"><br>
-    
+    <div class="input-group">
+        <input type="text" name="address">
+        <img src="{{ url_for('static', filename='add_pic.png')}}">
+    </div>
     <button type="submit">추가하기</button>
 </form>
+
+
+
+
+
+<script>
+    function togglecustominput() {
+        const relationselect = document.getElementById('relation');
+        const custominput = document.getElementById('customrelation');
+
+        if(relationselect.value == '기타'){
+            custominput.style.display = 'block';
+            custominput.required = true;
+        }
+        else{
+            custominput.style.display = 'none';
+            custominput.required = false;
+        }
+    }
+</script>
+
+
+
+
+
+
 {% endblock %}

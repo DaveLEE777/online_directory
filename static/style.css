@@ -34,3 +34,25 @@ form input {
     padding: 5px;
     margin-bottom: 10px;
 }
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;  /* 입력 필드 간 간격 */
+}
+
+.input-group input {
+    
+   
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-group img {
+    width: 40px;         /* 이미지 크기 조정 */
+    height: 40px;
+    margin-left: 10px;    /* 이미지와 입력 필드 사이의 간격 */
+    
+    transform: translateY(-7px);
+}

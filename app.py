@@ -29,10 +29,13 @@ def add_contact():
     if request.method == 'POST':
         name = request.form['name']
         phone = request.form['phone']
+        
         email = request.form.get('email')
         birthday = request.form.get('birthday')
         address = request.form.get('address')
         relation = request.form.get('relation')
+        if relation == '기타':
+            relation = request.form.get('custom_relation')
         
         new_contact = Contact(name=name, phone=phone, email=email, birthday=birthday, address=address, relation=relation)
         db.session.add(new_contact)
