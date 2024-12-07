@@ -2,11 +2,37 @@
 
 {% block content %}
 <h2>전화번호부</h2>
-<ul>
+
+<!-- 검색 입력란 -->
+<input type="text" id="search" placeholder="검색...">
+
+<!-- 결과를 표시할 리스트 -->
+<ul id="contact-list">
     {% for contact in contacts %}
         <li>
             <a href="{{ url_for('detail', id=contact.id) }}">{{ contact.name }} - {{ contact.phone }}</a>
         </li>
     {% endfor %}
 </ul>
+
+<script>
+    // 검색 입력란 이벤트 리스너
+    document.getElementById('search').addEventListener('input', function() {
+        const query = this.value;  // 입력값
+        fetch(`/search?query=${query}`)  // AJAX 요청
+            .then(response => response.json())  // JSON 응답 처리
+            .then(data => {
+                const contactList = document.getElementById('contact-list');
+                contactList.innerHTML = '';  // 기존 리스트 초기화
+
+                // 검색 결과에 맞게 리스트 동적 업데이트
+                data.forEach(contact => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="/contact/${contact.id}">${contact.name} - ${contact.phone}</a>`;
+                    contactList.appendChild(li);
+                });
+            });
+    });
+</script>
+
 {% endblock %}

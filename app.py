@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -83,7 +83,21 @@ def edit_contact(id):
 
 
 
-
+@app.route('/search')
+def search():
+    query = request.args.get('query', '')  # 검색어를 받음
+    if query:
+        # 이름, 전화번호를 기준으로 검색 (대소문자 구분하지 않음)
+        contacts = Contact.query.filter(Contact.name.ilike(f'%{query}%') | Contact.phone.ilike(f'%{query}%')).all()
+    else:
+        contacts = Contact.query.all()  # 검색어가 비었을 경우 모든 연락처 반환
+    
+    # 결과를 JSON 형식으로 반환
+    return jsonify([{
+        'id': contact.id,
+        'name': contact.name,
+        'phone': contact.phone
+    } for contact in contacts])
 
 
 
