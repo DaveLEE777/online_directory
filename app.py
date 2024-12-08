@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///contacts.db'
+app.secret_key = "fuck_off"
 db = SQLAlchemy(app)
 
 # 데이터베이스 모델 정의
@@ -21,8 +22,20 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    contacts = Contact.query.all()
-    return render_template('index.html', contacts=contacts)
+    sort_order = request.args.get('sort')  # 정렬 기준 가져오기
+    print(f"Received sort_order: {sort_order}")  # 디버깅 출력
+
+    if sort_order == 'name_asc':  # 이름 오름차순 정렬
+        contacts = Contact.query.order_by(Contact.name).all()
+    elif sort_order == 'name_desc':  # 추가된 순서로 정렬
+        contacts = Contact.query.order_by(Contact.id).all()
+    else:  # 기본 정렬
+        contacts = Contact.query.all()
+
+    print(f"Contacts: {[contact.name for contact in contacts]}")  # 정렬 결과 출력
+    return render_template('index.html', contacts=contacts, sort_order=sort_order)
+
+
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_contact():
@@ -101,6 +114,20 @@ def search():
 
 
 
+
+@app.route('/toggle_sort')
+def toggle_sort():
+    # 정렬 상태를 반전시킴
+    sort_by_name = session.get('sort_by_name', False)
+    session['sort_by_name'] = not sort_by_name
+    return redirect(url_for('index'))  # 변경 후 메인 페이지로 리다이렉트
+
+
+
+
 # 앱 실행
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

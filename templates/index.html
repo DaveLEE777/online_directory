@@ -3,8 +3,38 @@
 {% block content %}
 <h2>전화번호부</h2>
 
-<!-- 검색 입력란 -->
-<input type="text" id="search" placeholder="검색...">
+<div>
+    <!-- 검색 입력란 -->
+    <input type="text" id="search" placeholder="검색...">
+    <button id="sortButton" class="btn" data-sort="{{ 'name_asc' if sort_order == 'name_desc' else 'name_desc' }}">
+        {{ '추가순 정렬' if sort_order == 'name_asc' else '이름순 정렬' }}
+    </button>
+</div>
+
+
+<script>
+    // 버튼 클릭 이벤트 설정
+    document.getElementById('sortButton').addEventListener('click', function () {
+        const currentSort = this.getAttribute('data-sort'); // 현재 정렬 상태 가져오기
+        let nextSort = '';
+
+        if (currentSort === 'name_desc') {
+            nextSort = 'name_desc'; // 다음 상태로 변경
+            this.textContent = '추가순 정렬'; // 버튼 텍스트 변경
+        } else {
+            nextSort = 'name_asc';
+            this.textContent = '이름순 정렬';
+        }
+
+        this.setAttribute('data-sort', nextSort); // 새 정렬 상태 설정
+        // URL 변경 및 새 요청
+        window.location.href = `/?sort=${nextSort}`;
+    });
+</script>
+
+
+
+
 
 <!-- 결과를 표시할 리스트 -->
 <ul id="contact-list">
