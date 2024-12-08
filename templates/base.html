@@ -8,8 +8,14 @@
 </head>
 <body>
     <header>
-        <h1>Online_Directory</h1>
-        <a href="{{ url_for('index') }}">Home</a> | <a href="{{ url_for('add_contact') }}">Add Contact</a>
+        <!-- Online Directory를 클릭하면 홈으로 이동하도록 a 태그로 감싸기 -->
+        <a href="{{ url_for('index') }}" class="home-btn">
+            <h1>Online Directory</h1>
+        </a>
+
+        <div class="nav-links">
+            <a href="{{ url_for('add_contact') }}" class="btn">Add Contact</a>
+        </div>
     </header>
     <main>
         {% block content %}{% endblock %}
