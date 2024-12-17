@@ -1,10 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///contacts.db'
-app.secret_key = "fuck_off"
+app.secret_key = "Hi"
 db = SQLAlchemy(app)
+
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 # 데이터베이스 모델 정의
 class Contact(db.Model):
@@ -15,6 +23,7 @@ class Contact(db.Model):
     birthday = db.Column(db.String(10))
     address = db.Column(db.String(100))
     relation = db.Column(db.String(100))
+    image = db.Column(db.String(200))
 
 # 데이터베이스 생성
 with app.app_context():
@@ -49,8 +58,17 @@ def add_contact():
         relation = request.form.get('relation')
         if relation == '기타':
             relation = request.form.get('custom_relation')
-        
-        new_contact = Contact(name=name, phone=phone, email=email, birthday=birthday, address=address, relation=relation)
+        #image upload
+        image_file = request.files.get('image')
+        image_filename = None
+
+        if image_file:  # 이미지 파일이 존재할 경우
+            image_filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+        else:
+            image_filename = None
+
+        new_contact = Contact(name=name, phone=phone, email=email, birthday=birthday, address=address, relation=relation, image=image_filename)
         db.session.add(new_contact)
         db.session.commit()
         return redirect(url_for('index'))
@@ -87,6 +105,16 @@ def edit_contact(id):
             contact.relation = request.form.get('custom_relation')
         else:
             contact.relation = request.form['relation']        
+        
+        #image edit
+        if 'image' in request.files:
+            file = request.files['image']
+            filename = secure_filename(file.filename)
+        # 파일 저장
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            contact.image = filename  # 이미지 파일 이름을 contact 객체에 저장
+        
+        
         
         # 데이터베이스에 변경 사항 저장
         db.session.commit()

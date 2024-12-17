@@ -9,7 +9,21 @@
     <p><strong>이메일:</strong> {{ contact.email }}</p>
     <p><strong>생일:</strong> {{ contact.birthday }}</p>
     <p><strong>주소:</strong> {{ contact.address }}</p>
+    <!-- image -->
+    <p>
+        <strong>사진:</strong><br>
+        {% if contact.image %}
+            <img src="{{ url_for('static', filename='uploads/' + contact.image) }}" alt="{{ contact.name }}'s Photo" width="200">
+        {% else %}
+            <img src="{{ url_for('static', filename='no_image.png') }}" alt="No image found">
+        {% endif %}
+    </p>
 </div>
+
+
+
+
+
 
 <div class="button-group">
     <!-- 삭제 버튼 -->

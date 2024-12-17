@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>연락처 수정</h2>
-<form action="{{ url_for('edit_contact', id=contact.id) }}" method="post">
+<form action="{{ url_for('edit_contact', id=contact.id) }}" method="post" enctype="multipart/form-data">
     <label for="name">이름:</label>
     <div class="input-group">
         <input type="text" name="name" id="name" value="{{ contact.name }}" required>
@@ -46,7 +46,19 @@
         <img src="{{ url_for('static', filename='add_pic.png')}}">
     </div>
     
-    <button type="submit">저장하기</button>
+    <label for="image">사진:</label><br>
+    {% if contact.image %}
+        <img src="{{ url_for('static', filename='uploads/' + contact.image) }}" alt="Contact Image" width="200">
+    {% else %}
+        <img src="{{ url_for('static', filename='no_image.png') }}" alt="No Image" width="200">
+    {% endif %}
+    
+    <input type="file" name="image" accept="image/*"><br><br>
+    
+    
+    <div class="button-group">
+        <button type="submit" class="btn btn-primary">저장하기</button>
+    </div>
 </form>
 
 <script>

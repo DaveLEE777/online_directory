@@ -2,7 +2,8 @@
 
 {% block content %}
 <h2>새 연락처 추가</h2>
-<form action="{{ url_for('add_contact') }}" method="post">
+<form action="{{ url_for('add_contact') }}" method="post" enctype="multipart/form-data">
+
     <label for="name">이름:</label>
     <div class="input-group">
         <input type="text" name="name" id="name" required>
@@ -47,7 +48,15 @@
         <input type="text" name="address">
         <img src="{{ url_for('static', filename='add_pic.png')}}">
     </div>
-    <button type="submit">추가하기</button>
+    
+    <!-- image upload field -->
+    <label for="image">사진:</label>
+    <input type="file" name="image" accept="image/*"><br>
+    
+    
+    <div class="button-group">
+        <button type="submit" class="btn btn-primary">추가하기</button>
+    </div>
 </form>
 
 
